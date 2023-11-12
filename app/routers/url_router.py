@@ -49,7 +49,8 @@ async def shorten_url(
     try:
 
         # Check if original url exists already
-        if existing_url:= db.query(URL_INFO).filter(URL_INFO.original_url == original_url).first():
+        existing_url = db.query(URL_INFO).filter(URL_INFO.original_url == original_url).first()
+        if existing_url:
             shortened_url = existing_url.shortened_url
             url_hash = existing_url.url_hash
 
@@ -107,8 +108,8 @@ async def redirect_shortened_url(shortened_url: str, db : Session = Depends(get_
     """
 
     redirect_url = db.query(URL_INFO).filter(URL_INFO.url_hash == shortened_url).first()
-
-    if original_url:= redirect_url.original_url:
+    original_url = redirect_url.original_url
+    if original_url:
 
         return RedirectResponse(url=original_url, status_code=307)
     
