@@ -1,0 +1,4 @@
+Project File Structure: https://python.plainenglish.io/a-comprehensive-guide-to-structuring-a-fastapi-project-for-reproducibility-and-maintainability-1705c41dac41
+Hashing the long url: https://docs.python.org/3/library/hashlib.html#module-hashlib
+Redirection in FastAPI: https://medium.com/featurepreneur/fastapi-render-template-redirection-c98a26ae1e2a#:~:text=The%20url_for()%20method%20generates,a%20302%20(Found)%20redirect.
+HTTP status code: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#redirection_messages
