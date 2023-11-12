@@ -12,7 +12,7 @@ from app.models.url_model import(
 
 from app.settings import(
     LINK_SHORTENER_ENCODING_SCHEME,
-    DB_HOST, BACEKEND_PORT
+    DB_HOST, BACEKEND_PORT, LIVE_BASE_URL
 )
 
 from sqlalchemy import func
@@ -64,7 +64,7 @@ async def shorten_url(
                 re_hash_byte_form = bytes(existing_hash.url_hash, LINK_SHORTENER_ENCODING_SCHEME)
                 url_hash = hashlib.sha256(re_hash_byte_form).hexdigest()[:10]
             
-            shortened_url = f"{DB_HOST}:{BACEKEND_PORT}/{url_hash}"
+            shortened_url = f"{LIVE_BASE_URL}/{url_hash}"
             
             new_url = URL_INFO(
                 original_url=original_url,

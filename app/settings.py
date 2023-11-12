@@ -22,3 +22,4 @@ SQLITE = "sqlite"
 POSTGRESQL = "postgresql"
 LINK_SHORTENER_ENCODING_SCHEME = "utf-8"
 BACEKEND_PORT = 8000
+LIVE_BASE_URL = "https://kokuru.onrender.com"
