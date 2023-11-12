@@ -59,7 +59,8 @@ async def shorten_url(
             url_hash = hashlib.sha256(original_link_byte_form).hexdigest()[:10]
 
             #Check if link with hash already exists
-            if existing_hash:= db.query(URL_INFO).filter(URL_INFO.url_hash == url_hash).first():
+            existing_hash = db.query(URL_INFO).filter(URL_INFO.url_hash == url_hash).first()
+            if existing_hash:
                 re_hash_byte_form = bytes(existing_hash.url_hash, LINK_SHORTENER_ENCODING_SCHEME)
                 url_hash = hashlib.sha256(re_hash_byte_form).hexdigest()[:10]
             
