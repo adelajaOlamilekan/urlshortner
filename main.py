@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers.url_router import router
+from app.routers.url_router import router
 
 app = FastAPI()
 
@@ -21,6 +21,6 @@ app.include_router(router)
 async def home():
     return "Welcome to URL shortener"
 
-"""if __name__ == "__main__":
-    uvicorn.run(app="app.main", port=8000, reload=True)"""
+if __name__ == "__main__":
+    uvicorn.run(app="main:app", port=8000, reload=True)
 

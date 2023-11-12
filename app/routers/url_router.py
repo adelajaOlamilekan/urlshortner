@@ -6,11 +6,11 @@ from fastapi import(
 )
 from fastapi.responses import RedirectResponse
 
-from models.url_model import(
+from app.models.url_model import(
     URL_INFO
 )
 
-from settings import(
+from app.settings import(
     LINK_SHORTENER_ENCODING_SCHEME,
     DB_HOST, BACEKEND_PORT
 )
@@ -18,7 +18,7 @@ from settings import(
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
-from database import get_db_session
+from app.database import get_db_session
 
 
 import hashlib

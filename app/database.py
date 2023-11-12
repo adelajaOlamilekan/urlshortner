@@ -10,7 +10,7 @@ from sqlalchemy import(
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-from settings import(
+from app.settings import(
     DB_USER, DB_PASSWORD, DB_HOST,
     DB_TYPE, DB_NAME, DB_DRIVER,
     MYSQL, SQLITE, POSTGRESQL
