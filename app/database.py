@@ -19,7 +19,7 @@ from app.settings import(
 )
 
 if DB_TYPE in [MYSQL, POSTGRESQL]:
-    db_url = f"{DB_TYPE}+mysqlconnector://{LIVE_DB_USER}:{LIVE_DB_PASSWORD}@{LIVE_DB_HOST}:{LIVE_DB_PORT}/{LIVE_DB_NAME}"
+    db_url = f"{DB_TYPE}+mysqlconnector://{LIVE_DB_USER}:{LIVE_DB_PASSWORD}@{LIVE_DB_HOST}/{LIVE_DB_NAME}"
 
 
 else:

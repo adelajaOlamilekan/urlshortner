@@ -24,7 +24,6 @@ class URL_INFO(Base):
     """
 
     __tablename__ = "url"
-
     id: int = Column(Integer, primary_key=True, index=True)
     original_url: String = Column(String(255), nullable=False, unique=True, index=True)
     shortened_url: String  = Column(String(255), nullable=False, unique=True)
