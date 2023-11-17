@@ -11,8 +11,7 @@ from app.models.url_model import(
 )
 
 from app.settings import(
-    LINK_SHORTENER_ENCODING_SCHEME,
-    DB_HOST, BACEKEND_PORT, LIVE_BASE_URL
+    LINK_SHORTENER_ENCODING_SCHEME, LIVE_BASE_URL
 )
 
 from sqlalchemy import func
