@@ -1,33 +1,25 @@
 from dotenv import load_dotenv
-load_dotenv()
 import os
+import argparse
 
-"""
-CONSTANTS USED IN PROJECT
-"""
-MYSQL = "mysql"
-SQLITE = "sqlite"
-POSTGRESQL = "postgresql"
-LINK_SHORTENER_ENCODING_SCHEME = "utf-8"
-BACEKEND_PORT = 8000
+load_dotenv()
 
-"""
-DATABASE SETTINGS VARIABLE
-"""
-LOCAL_DB_USER = "fastapi_user"
-LOCAL_DB_PASSWORD = ""
-LOCAL_DB_HOST= "localhost"
-LOCAL_DB_PORT  = 3306
-LOCAL_DB_NAME = "url_shortner"
-DB_TYPE = MYSQL
+parser = argparse.ArgumentParser(
+        description="URL Shortening Server"
+    )
+parser.add_argument("--runstate", required=True, type=int, default=1)
+args = parser.parse_args()
 
-"""
-LIVE DATABASE CREDENTIALS
-"""
-LIVE_DB_USER = os.getenv("LIVE_DB_USER")
-LIVE_DB_PASSWORD = os.getenv("LIVE_DB_PASSWORD")
-LIVE_DB_HOST= os.getenv("LIVE_DB_HOST")
-LIVE_DB_PORT  = os.getenv("LIVE_DB_PORT")
-LIVE_DB_NAME = os.getenv("LIVE_DB_NAME")
-LIVE_DB_DRIVER = os.getenv("LIVE_DB_DRIVER")
-LIVE_BASE_URL = os.getenv("LIVE_BASE_URL")
+RUN_STATE = args.runstate
+
+
+
+LOCAL_URL_ARGS_VALUE = int(os.getenv("LOCAL_URL_ARGS_VALUE"))
+LOCAL_DB_URL = os.getenv("LOCAL_DB_URL")
+LIVE_DB_URL = os.getenv("LIVE_DB_URL")
+LOCAL_API_BASE_URL = os.getenv("LOCAL_API_BASE_URL")
+LIVE_API_BASE_URL = os.getenv("LIVE_API_BASE_URL")
+LINK_SHORTENER_ENCODING_SCHEME = os.getenv("LINK_SHORTENER_ENCODING_SCHEME")
+
+DB_URL = LOCAL_DB_URL if RUN_STATE == LOCAL_URL_ARGS_VALUE else LIVE_DB_URL
+API_BASE_URL = LOCAL_API_BASE_URL if RUN_STATE == LOCAL_URL_ARGS_VALUE else LIVE_API_BASE_URL

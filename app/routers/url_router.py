@@ -2,16 +2,18 @@ from fastapi import(
     Depends,
     HTTPException,
     APIRouter,
-    Request
+    Request,
 )
 from fastapi.responses import RedirectResponse
+
+from typing import Optional
 
 from app.models.url_model import(
     URL_INFO
 )
 
 from app.settings import(
-    LINK_SHORTENER_ENCODING_SCHEME, LIVE_BASE_URL
+    API_BASE_URL, LINK_SHORTENER_ENCODING_SCHEME
 )
 
 from sqlalchemy import func
@@ -21,13 +23,13 @@ from app.database import get_db_session
 
 
 import hashlib
+import argparse
 
 router = APIRouter()
 
-
 @router.post("/shorten-url/")
 async def shorten_url(
-        original_url: str,
+        original_url: str, custom_back_half: str = None,
         db: Session = Depends(get_db_session),
 ):
     """
@@ -35,6 +37,7 @@ async def shorten_url(
 
     Args:
         original_link(str): The original link that is to be shortened.
+        custom_back_half(str, Optional): An optional alternative custom name to replace the original link 
         db(Session, Optional): The db session.
     
     Returns:
@@ -46,35 +49,51 @@ async def shorten_url(
     """
     
     try:
+        #check if original url already exists
+        existing_original_url = db.query(URL_INFO).filter(URL_INFO.original_url == original_url).first()
+        if existing_original_url:
+            return {
+            "status_code": 200, 
+            "message": "URL has been shortened before successfully",
+            "original_url": original_url,
+            "shortened_url": existing_original_url.shortened_url,
+            "url_hash": existing_original_url.url_hash
+        }
 
-        # Check if original url exists already
-        existing_url = db.query(URL_INFO).filter(URL_INFO.original_url == original_url).first()
-        if existing_url:
-            shortened_url = existing_url.shortened_url
-            url_hash = existing_url.url_hash
+        # Check if custom_back_half exists already
+        if custom_back_half and db.query(URL_INFO).filter(URL_INFO.url_hash == custom_back_half).first():
+            return {
+                "status_code": 404, 
+                "message": "The specified custom back half already exists for another url",
+            } 
 
-        else:
+        # Check if custom back half was supplied and it is not available in the database
+        if custom_back_half and not (db.query(URL_INFO).filter(URL_INFO.url_hash == custom_back_half).first()):
+            url_hash = custom_back_half
+
+        # Check if custom back half is not supplied and origianl url is not in database
+        if not custom_back_half and not db.query(URL_INFO).filter(URL_INFO.original_url == original_url).first():
             original_link_byte_form = bytes(original_url, LINK_SHORTENER_ENCODING_SCHEME)
             url_hash = hashlib.sha256(original_link_byte_form).hexdigest()[:10]
+    
+        #Check if link with hash already exists then rehash the original url
+        existing_hash = db.query(URL_INFO).filter(URL_INFO.url_hash == url_hash).first()
+        if existing_hash:
+            re_hash_byte_form = bytes(existing_hash.url_hash, LINK_SHORTENER_ENCODING_SCHEME)
+            url_hash = hashlib.sha256(re_hash_byte_form).hexdigest()[:10]
+        
+        shortened_url = f"{API_BASE_URL}/{url_hash}"
 
-            #Check if link with hash already exists
-            existing_hash = db.query(URL_INFO).filter(URL_INFO.url_hash == url_hash).first()
-            if existing_hash:
-                re_hash_byte_form = bytes(existing_hash.url_hash, LINK_SHORTENER_ENCODING_SCHEME)
-                url_hash = hashlib.sha256(re_hash_byte_form).hexdigest()[:10]
-            
-            shortened_url = f"{LIVE_BASE_URL}/{url_hash}"
-            
-            new_url = URL_INFO(
-                original_url=original_url,
-                shortened_url= shortened_url,
-                url_hash = url_hash
-            )
+        new_url = URL_INFO(
+            original_url=original_url,
+            shortened_url= shortened_url,
+            url_hash = url_hash
+        )
 
-            db.add(new_url)
-            db.commit()
-            db.refresh(new_url)
-            db.close()
+        db.add(new_url)
+        db.commit()
+        db.refresh(new_url)
+        db.close()
 
         return{
             "status_code": 200, 
