@@ -7,7 +7,7 @@ load_dotenv()
 parser = argparse.ArgumentParser(
         description="URL Shortening Server"
     )
-parser.add_argument("--runstate", required=True, type=int, default=1)
+parser.add_argument("--runstate", required=s, type=int, default=1)
 args = parser.parse_args()
 
 RUN_STATE = args.runstate
