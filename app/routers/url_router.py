@@ -111,7 +111,7 @@ async def shorten_url(
         }
 
 
-@router.get("/{shortened_url}")
+@router.get("/{shortened_url}/")
 async def redirect_shortened_url(shortened_url: str, db : Session = Depends(get_db_session)):
     """
     Redirects the user to the original URL associated with the provided shortened URL.
