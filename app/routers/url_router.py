@@ -138,3 +138,34 @@ async def redirect_shortened_url(shortened_url: str, db : Session = Depends(get_
             "message": "Requested URL not found"
         }
 
+@router.delete("/remove_url/")
+async def remove_shortened_url(shortened_url: str, db: Session = Depends(get_db_session)):
+    """
+    Deletes an existing shortened url
+
+    Args:
+        shortened_url(str): The url to delete
+
+    Returns:
+        None
+
+    """
+
+    #Check if the url exists
+    url = db.query(URL_INFO).filter(URL_INFO.shortened_url == shortened_url).first()
+
+    if url == None:
+        return {
+            "status_code": 404,
+            "message": "Requested URL does not exist in the record"
+        }
+
+    db.delete(url)
+    db.commit()
+    db.close()
+
+    return {
+        "status_code": 200,
+        "message": "URL deleted successfully"
+    }
+

@@ -7,14 +7,14 @@ load_dotenv()
 parser = argparse.ArgumentParser(
         description="URL Shortening Server"
     )
-parser.add_argument("--runstate", required=True, type=int, default=1)
+parser.add_argument("--runstate", required=True, type=str, default="local")
 args = parser.parse_args()
 
 RUN_STATE = args.runstate
 
 
 
-LOCAL_URL_ARGS_VALUE = int(os.getenv("LOCAL_URL_ARGS_VALUE"))
+LOCAL_URL_ARGS_VALUE = os.getenv("LOCAL_URL_ARGS_VALUE")
 LOCAL_DB_URL = os.getenv("LOCAL_DB_URL")
 LIVE_DB_URL = os.getenv("LIVE_DB_URL")
 LOCAL_API_BASE_URL = os.getenv("LOCAL_API_BASE_URL")
