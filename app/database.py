@@ -17,7 +17,7 @@ from app.settings import(
 db_url = DB_URL
     
 
-db_engine = create_engine(db_url)
+db_engine = create_engine(db_url, pool_pre_ping=True)
 
 # Create all Database Tables
 Base = declarative_base()
