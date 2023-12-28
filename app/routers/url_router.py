@@ -127,7 +127,15 @@ async def redirect_shortened_url(shortened_url: str, db : Session = Depends(get_
     """
 
     redirect_url = db.query(URL_INFO).filter(URL_INFO.url_hash == shortened_url).first()
+
+    if redirect_url == None:
+        return {
+            "status_code": 404,
+            "message": "URL does not exist in the record"
+        }
+    
     original_url = redirect_url.original_url
+    
     if original_url:
 
         return RedirectResponse(url=original_url, status_code=307)
